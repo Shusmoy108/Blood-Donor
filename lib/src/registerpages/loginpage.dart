@@ -1,4 +1,5 @@
-import 'package:blooddonor/src/mainpages/homepages/bloodpage.dart';
+import 'package:blooddonor/src/mainpages/bloodpages/bloodpage.dart';
+import 'package:blooddonor/src/mainpages/homepages/mainpage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -41,87 +42,87 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   saveAuthData(bool value, User u) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setBool('auth', value);
-    sp.setString("email", u.email);
+    sp.setString("mobile", email);
   }
 
   void login() {
-     var router = new MaterialPageRoute(
-              builder: (BuildContext context) => new BloodsPage()
-              
-              );
-          Navigator.of(context).pushReplacement(router);
-    // databaseReference
-    //     .orderByChild("email")
-    //     .equalTo(email)
-    //     .once()
-    //     .then((onValue) {
-    //   for (var value in onValue.value.values) {
-    //     if (value['password'] == password) {
-    //       setState(() {
-    //         _error = "";
-    //       });
-
-    //       User u;
-    //       u = User(
-    //           value["username"],
-    //           value["gender"],
-    //           value["address"],
-    //              value["bloodgroup"],
-    //           // value["area"],
-    //           // value["department"],
-    //           // value["institution"],
-    //           value["mobile"],
-    //           value["password"],
-    //           value["email"],
-           
-    //           // value["rating"],
-    //           // value["number"],
-    //           // value["subject"]
-    //           );
-    //           //u.etuition=value["etuition"];
-    //       //print(value);
-    //       // String x = value["number"];
-    //       // u.number = int.parse(x);
-    //       // // u.rating = value["rating"];
-    //      // print(u.number);
-    //      // print(u.rating);
-    //       for (var key in onValue.value.keys) {
-    //         u.uid = key;
-    //       }
-    //       saveAuthData(true, u);
-    //       var router = new MaterialPageRoute(
-    //           builder: (BuildContext context) => new LoginPage()
+    //  var router = new MaterialPageRoute(
+    //           builder: (BuildContext context) => new BloodsPage()
               
     //           );
     //       Navigator.of(context).pushReplacement(router);
-    //     } else {
-    //       print("fdds");
-    //       setState(() {
-    //         _error = "Incorrect Email or Password";
-    //       });
-    //     }
-    //   }
-    // }).catchError((onError) {
-    //   print(onError);
-    //   setState(() {
-    //     _error = "Incorrect Email or Password";
-    //   });
-    // });
-    // // if (email == 'ab@xy.com' && password == '12345') {
-    // //   Navigator.of(context).pushReplacement(
-    // //     MaterialPageRoute(
-    // //       builder: (BuildContext context) {
-    // //         return MainPage();
-    // //       },
-    // //     ),
-    // //   );
-    // // }
+    databaseReference
+        .orderByChild("mobile")
+        .equalTo(email)
+        .once()
+        .then((onValue) {
+      for (var value in onValue.value.values) {
+        if (value['password'] == password) {
+          setState(() {
+            _error = "";
+          });
+
+          User u;
+          u = User(
+              value["username"],
+              value["gender"],
+              value["address"],
+                 value["bloodgroup"],
+              // value["area"],
+              // value["department"],
+              // value["institution"],
+              value["mobile"],
+              value["password"],
+              value["email"],
+           
+              // value["rating"],
+              // value["number"],
+              // value["subject"]
+              );
+              //u.etuition=value["etuition"];
+          //print(value);
+          // String x = value["number"];
+          // u.number = int.parse(x);
+          // // u.rating = value["rating"];
+         // print(u.number);
+         // print(u.rating);
+          for (var key in onValue.value.keys) {
+            u.uid = key;
+          }
+          saveAuthData(true, u);
+          var router = new MaterialPageRoute(
+              builder: (BuildContext context) => new MainPage(email)
+              
+              );
+          Navigator.of(context).pushReplacement(router);
+        } else {
+          print("fdds");
+          setState(() {
+            _error = "Incorrect Email or Password";
+          });
+        }
+      }
+    }).catchError((onError) {
+      print(onError);
+      setState(() {
+        _error = "Incorrect Email or Password";
+      });
+    });
+    // if (email == 'ab@xy.com' && password == '12345') {
+    //   Navigator.of(context).pushReplacement(
+    //     MaterialPageRoute(
+    //       builder: (BuildContext context) {
+    //         return MainPage();
+    //       },
+    //     ),
+    //   );
+    // }
   }
 
   Widget errorField() {
     return new Text(
       _error,
-      style: new TextStyle(fontSize: 20, color: Colors.redAccent),
+      style: new TextStyle(fontSize: 20, color: Colors.greenAccent),
     );
   }
 
@@ -187,10 +188,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget emailField() {
+ Widget emailField() {
     return TextFormField(
       decoration: InputDecoration(
-        labelText: 'Mobile Number',
+        labelText: 'Mobile Number *',
         icon: Icon(
           Icons.call,
           color: Colors.black87,
@@ -199,12 +200,25 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           color: Colors.black87,
         ),
       ),
+      keyboardType: TextInputType.emailAddress,
+      autovalidate: _autovalidateLoginform,
+      validator: (String value) {
+        if (isNumeric(value)&& value.length==11)
+          return null;
+        else
+          return 'Mobile number is invalid';
+      },
       onSaved: (String value) {
         email = value;
       },
     );
   }
-
+ bool isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    return double.parse(s, (e) => null) != null;
+  }
   Widget passwordField() {
     return TextFormField(
       decoration: InputDecoration(

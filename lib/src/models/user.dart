@@ -19,6 +19,8 @@ class User {
   String etuition='No';
   String f='x';
   String bloodgroup;
+  int donationnumber=0;
+  int donationtime=0;
 
   User(
       this.username,
@@ -62,6 +64,8 @@ class User {
       "address": address,
       "mobile": mobile,
       "email": email,
+      "donationnumber":donationnumber,
+      "donationtime":donationtime,
 
      
      

@@ -1,40 +1,25 @@
 import 'package:blooddonor/src/mainpages/Bloodpages/bloodpage.dart';
-import 'package:blooddonor/src/mainpages/bloodpages/bloodpage.dart' as prefix0;
 import 'package:blooddonor/src/mainpages/homepages/mainpage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_multiselect/flutter_multiselect.dart';
-import '../models/user.dart';
-import 'loginpage.dart';
+import '../../models/user.dart';
 
-class SignUp extends StatelessWidget {
-  // This widget is the root of your application.
+class Blooddonorpage extends StatefulWidget {
+  String m;
+Blooddonorpage(this.m);
   @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Sign Up',
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: new SignUpPage(),
-    );
-  }
+  _BlooddonorState createState() => new _BlooddonorState(m);
 }
 
-class SignUpPage extends StatefulWidget {
-  @override
-  _SignUpState createState() => new _SignUpState();
-}
-
-class _SignUpState extends State<SignUpPage> {
+class _BlooddonorState extends State<Blooddonorpage> {
   User user;
   final FirebaseDatabase database = FirebaseDatabase.instance;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   DatabaseReference databaseReference;
   int genderValue;
-  String gender, _error = "";
+  String gender, _error = "",m;
   String bloodgrp;
-  
+_BlooddonorState(this.m);
   List<String> bloodes = [
     'A+',
     'B+',
@@ -96,7 +81,7 @@ class _SignUpState extends State<SignUpPage> {
              
               genderField(),
             
-              passwordField(),
+            //  passwordField(),
               addressField(),
               Container(
                 margin: EdgeInsets.only(top: 25),
@@ -266,6 +251,7 @@ Widget bloodfield() {
             formKey.currentState.save();
             user.gender=gender;
             user.bloodgroup=bloodgrp;
+            user.password="123456";
             databaseReference
               .orderByChild("mobile")
               .equalTo(user.mobile)
@@ -275,15 +261,13 @@ Widget bloodfield() {
               setState(() {
                 _error = "";
               });
-                formKey.currentState.reset();
-            //save form data to the database
-            databaseReference.push().set(user.toJson());
-            var router = new MaterialPageRoute(
-                builder: (BuildContext context) => new prefix0.BloodsPage(user.mobile));
-            Navigator.of(context).pushReplacement(router);
               formKey.currentState.reset();
 
-             
+              //save form data to the database
+              databaseReference.push().set(user.toJson());
+              var router = new MaterialPageRoute(
+                  builder: (BuildContext context) => new MainPage(m));
+              Navigator.of(context).push(router);
             } else {
               setState(() {
                 _error = "Mobile number is already exist";
@@ -293,12 +277,19 @@ Widget bloodfield() {
             setState(() {
               _error = "";
             });
-          
+            formKey.currentState.reset();
+            //save form data to the database
+         
           });
 
 
 
-           
+          //  databaseReference.push().set(user.toJson());
+          //    formKey.currentState.reset();
+          //      var router = new MaterialPageRoute(
+          //         builder: (BuildContext context) => new BloodsPage());
+
+          //     Navigator.of(context).pushReplacement(router);
         }
       },
       child: Container(
@@ -316,7 +307,7 @@ Widget bloodfield() {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Sign Up',
+              'Create Donor',
               style: TextStyle(
                   color: Colors.white, fontSize: 15.0, fontFamily: 'Merienda'),
             ),
