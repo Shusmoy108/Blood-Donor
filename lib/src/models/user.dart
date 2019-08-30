@@ -21,7 +21,7 @@ class User {
   String bloodgroup;
   int donationnumber=0;
   int donationtime=0;
-
+  String donor;
   User(
       this.username,
       this.gender,
@@ -66,6 +66,7 @@ class User {
       "email": email,
       "donationnumber":donationnumber,
       "donationtime":donationtime,
+      "donor":donor,
 
      
      

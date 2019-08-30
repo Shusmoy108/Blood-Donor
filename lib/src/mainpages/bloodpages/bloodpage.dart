@@ -8,23 +8,26 @@ import 'blood.dart';
 class BloodsPage extends StatefulWidget {
   User u;
   String m;
-  BloodsPage(this.m);
+  String search;
+  String bg;
+  BloodsPage(this.m,this.search,this.bg);
   //AllTutionPage(this.u);
   @override
   State<StatefulWidget> createState() {
-    return BloodsPageState(m);
+    return BloodsPageState(m,search,bg);
   }
 }
 
 class BloodsPageState extends State<BloodsPage> {
   User u;
   String m;
-  BloodsPageState(this.m);
+  BloodsPageState(this.m,this.search,this.bg);
  // AllTutionPageState(this.u);
   String text="";
   final FirebaseDatabase database = FirebaseDatabase.instance;
   DatabaseReference databaseReference;
-
+  String search;
+  String bg;
   @override
   void initState() {
     setState(() {
@@ -38,7 +41,7 @@ class BloodsPageState extends State<BloodsPage> {
           context: context,
           builder: (context) => new AlertDialog(
                 title: new Text('Are you sure?'),
-                content: new Text('Do you want to exit Tuition Hub'),
+                content: new Text('Do you want to exit BloodHunt'),
                 actions: <Widget>[
                   new FlatButton(
                     onPressed: () => Navigator.of(context).pop(false),
@@ -56,7 +59,6 @@ class BloodsPageState extends State<BloodsPage> {
 
   Future<List<User>> _getUsers() async {
     List<User> users = List();
-
     await databaseReference.once().then((DataSnapshot snapshot) {
       if (snapshot.value.values != null) {
         for (var value in snapshot.value.values) {
@@ -69,112 +71,61 @@ class BloodsPageState extends State<BloodsPage> {
           users[i].uid = key;
           i++;
         }
-      } else {
-        users = [];
-      }
-     if(bloodgrp!=""){
-         List<User> searchusers = List();
+
+        if(bg!="" && search!=""){
+         List<User> searchusers = List(); 
        for(int i=0;i<users.length;i++){
       //  print(users[i].bloodgroup);
       //  print("hello");
-         if (users[i].bloodgroup.toLowerCase()==bloodgrp.toLowerCase() || 
-         users[i].username.toLowerCase().contains(bloodgrp.toLowerCase())||
-          users[i].address.toLowerCase().contains(bloodgrp.toLowerCase())){
+         if (users[i].bloodgroup.toLowerCase()==bg.toLowerCase() || 
+         users[i].username.toLowerCase().contains(search.toLowerCase())||
+          users[i].address.toLowerCase().contains(search.toLowerCase())){
               searchusers.add(users[i]);
          }
        }
        users=searchusers;
      } 
+  
+      else if(bg!=""){
+        List<User> searchusers = List(); 
+       for(int i=0;i<users.length;i++){
+      //  print(users[i].bloodgroup);
+      //  print(bg);
+      //  print("hello");
+         if (users[i].bloodgroup.toLowerCase()==bg.toLowerCase()){
+              searchusers.add(users[i]);
+         }
+       }
+       users=searchusers;
+      }
+       else {
+        users = [];
+      }
+      }
+   
     
     });
  //print(users);
     return users;
   }
-String bloodgrp="";
-  
-  List<String> bloodes = [
-    'A+',
-    'B+',
-    'AB+',
-    'O+',
-    'A-',
-    'B-',
-    'O-',
-    'AB-',
-    
-  ];
- Widget bloodfield() {
-    return new ListTile(
-      leading: new Text("Blood Group",
-          style: new TextStyle(color: Colors.black, fontSize: 16)),
-      title: DropdownButton(
-        hint: Text('Please choose a Blood Group'), // Not necessary for Option 1
-        value: bloodgrp,
-        onChanged: (newValue) {
-          setState(() {
-            bloodgrp = newValue;
-          });
-        },
-        items: bloodes.map((cls) {
-          return DropdownMenuItem(
-            child: new Text(cls),
-            value: cls,
-          );
-        }).toList(),
-      ),
-    );
-  }
-  
-  Widget appBarTitle=new Text("Blood Donor");
-  Icon actionIcon = new Icon(Icons.search);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          appBar: AppBar(
-             centerTitle: true,
-        title:appBarTitle,
-        actions: <Widget>[
-          new IconButton(icon: actionIcon,onPressed:(){
-          setState(() {
-                     if (this.actionIcon.icon == Icons.search){
-                      this.actionIcon = new Icon(Icons.close);
-                      this.appBarTitle = new TextField(
-                        onChanged: (value){
-                          setState(() {
-                             bloodgrp=value;
-                            // print(bloodgrp);
-                          });
-                       
-                        },
-                        style: new TextStyle(
-                          color: Colors.white,
-
-                        ),
-                        decoration: new InputDecoration(
-                          prefixIcon: new Icon(Icons.search,color: Colors.white),
-                          hintText: "Search...",
-                          hintStyle: new TextStyle(color: Colors.white)
-                        ),
-                      );}
-                      else {
-                        bloodgrp="";
-                        _getUsers();
-                        this.actionIcon = new Icon(Icons.search);
-                        this.appBarTitle = new Text("Blood Donor");
-                      }
-
-
-                    })
-                    ;}
-                    )
-                    ]),
-          body: Container(
-              color: Color.fromRGBO(234, 239, 241, 1.0),
-              //margin: EdgeInsets.all(10.0),
-              child: FutureBuilder(
-                future: _getUsers(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.data == []) {
+      appBar: new AppBar(
+        title: Center(child:new Text("Blood HUNT", style: TextStyle(fontFamily: "Arcon",fontWeight: FontWeight.bold),), 
+        ) ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/drop.jpg"),
+            fit: BoxFit.fill,
+            ),
+            ),
+        child: FutureBuilder(
+            future: _getUsers(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.data == null) {
                     return Container(
                       child: Center(
                         child: Text(
@@ -184,21 +135,20 @@ String bloodgrp="";
                   } else {
                     return Bloods(snapshot.data);
                   }
-                },
-                
-              )),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {
-              var router = new MaterialPageRoute(
-                  builder: (BuildContext context) => new Blooddonorpage(m));
-              Navigator.of(context).push(router);
-            },
-            label: Text(
-              'Add Donor',
-            ),
-            icon: Icon(Icons.add),
-            backgroundColor: Color.fromRGBO(220, 20, 60, 0.8),
-          ),
+                },)),
+          
+          // floatingActionButton: FloatingActionButton.extended(
+          //   onPressed: () {
+          //     var router = new MaterialPageRoute(
+          //         builder: (BuildContext context) => new Blooddonorpage(m));
+          //     Navigator.of(context).push(router);
+          //   },
+          //   label: Text(
+          //     'Add Donor',
+          //   ),
+          //   icon: Icon(Icons.add),
+          //   backgroundColor: Color.fromRGBO(220, 20, 60, 0.8),
+          // ),
         );
   }
 }

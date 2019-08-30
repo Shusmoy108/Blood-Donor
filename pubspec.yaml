@@ -61,6 +61,7 @@ flutter:
     - images/home3.png
     - images/blood.jpg
     - images/FAQ.jpg
+    - images/drop.jpg
     
    
   # To add assets to your application, add an assets section, like this:
@@ -79,6 +80,7 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+    
   fonts:
     - family: Lobster
       fonts:

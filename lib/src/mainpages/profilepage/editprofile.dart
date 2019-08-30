@@ -1,9 +1,10 @@
 
+import 'package:blooddonor/src/mainpages/homepages/mainpage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multiselect/flutter_multiselect.dart';
 import '../../models/user.dart';
-
+import 'dart:ui';
 
 
 
@@ -22,14 +23,20 @@ class EditProfileState extends State<EditProfile> {
   DatabaseReference databaseReference;
   int genderValue;
   String gender, _error = "";
-  
+  bool donor;
 
   @override
   void initState() {
     setState(() {
       super.initState();
       gender=user.gender;
- 
+      print(user.donor);
+      if(user.donor=="Yes"){
+        donor=true;
+      }
+      else {
+        donor=false;
+      }
      if(user.gender=='Male'){
        
        genderValue=1;
@@ -59,46 +66,88 @@ class EditProfileState extends State<EditProfile> {
   void edit(){
       databaseReference = database.reference().child("users/${user.uid}");
       databaseReference.update({
-          "username": user.username,
+      "username": user.username,
       "password": user.password,
       "gender": user.gender,
       "address": user.address,
-      "mobile": user.mobile,
-      "subject":user.subject,
+      "email": user.email,
+      "bloodgroup":user.bloodgroup,
+      "donor":user.donor
      
       });
   }
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: new AppBar(
-        title: new Text("Tuition Hub"),
-      ),
-      body: new Container(
-        margin: EdgeInsets.all(20),
-        child: Form(
-          key: formKey,
-          child: ListView(
-            children: <Widget>[
-              errorField(),
-              emailField(),
-              usernameField(),
-              genderField(),
-              mobileField(),
-              xField(),
-              subjectField(),
-              passwordField(),
-              addressField(),
-              Container(
-                margin: EdgeInsets.only(top: 25),
-              ),
-              submitButton()
-            ],
-          ),
+   Widget checkbox(){
+    return new Container(
+      child: Row(
+        children: <Widget>[
+          Checkbox(
+            value: donor,
+            onChanged: (bool value) {
+                setState(() {
+                    donor = value;
+                });
+            },
+            
         ),
+        Text("I am a Donor",style:TextStyle(fontFamily: "Arcon",fontSize: 20)),
+        ],
       ),
     );
+
+  }
+@override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+         decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/drop.jpg"),
+            fit: BoxFit.fill,
+          ),
+        ),
+      child:BackdropFilter(
+        filter:  ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Center(
+        child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+               
+                child: Form(
+                  key: formKey,
+                  child: ListView(
+                   // mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                    //  animatedCcup(),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                          usernameField(),
+                 mobileField(),
+              bloodfield(),
+              emailField(),
+             
+              genderField(),
+            
+            passwordField(),
+              addressField(),
+              checkbox(),
+                 SizedBox(
+                        height: 10.0,
+                      ),
+              submitButton()
+                  
+                    
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        
+      ),)
+    ));
   }
 
   bool isNumeric(String s) {
@@ -115,157 +164,6 @@ class EditProfileState extends State<EditProfile> {
     );
   }
 
-  Widget xField() {
-    return new MultiSelect(
-        autovalidate: true,
-        titleText: "Area",
-        validator: (value) {
-          if (value == null) {
-            return 'Please select one or more option(s)';
-          }
-        },
-        errorText: 'Please select one or more option(s)',
-        dataSource: [
-          {
-            "display": "Puran Dhaka",
-            "value": "Puran Dhaka",
-          },
-          {
-            "display": "Shahbag",
-            "value": "Shahbag",
-          },
-          {
-            "display": "Azimpur",
-            "value": "Azimpur",
-          },
-          {
-            "display": "Motizeel",
-            "value": "Motizeel",
-          },
-          {
-            "display": "Komolapur",
-            "value": "Komolapur",
-          },
-          {
-            "display": "MohammadPur",
-            "value": "MohammadPur",
-          },
-          {
-            "display": "Khilgaon",
-            "value": "Khilgaon",
-          },
-          {
-            "display": "Gulshan",
-            "value": "Gulshan",
-          },
-          {
-            "display": "Bonani",
-            "value": "Bonani",
-          },
-          {
-            "display": "Uttara",
-            "value": "Uttara",
-          },
-          {
-            "display": "Jatrabari",
-            "value": "Jatrabari",
-          },
-          {
-            "display": "Cantonment",
-            "value": "Cantonment",
-          },
-          {
-            "display": "Shyamoli",
-            "value": "Shyamoli",
-          },
-          {
-            "display": "Narayanganj",
-            "value": "Narayanganj",
-          }
-        ],
-        textField: 'display',
-        valueField: 'value',
-        filterable: true,
-        required: true,
-        value: user.area,
-        onSaved: (value) {
-          user.area = value;
-        });
-  }
-Widget subjectField() {
-    return new MultiSelect(
-        autovalidate: true,
-        titleText: "Subject",
-        validator: (value) {
-          if (value == null) {
-            return 'Please select one or more subject(s)';
-          }
-        },
-        errorText: 'Please select one or more subject(s)',
-        dataSource: [
-          {
-            "display": "Bangla",
-            "value": "Bangla",
-          },
-          {
-            "display": "English",
-            "value": "English",
-          },
-          {
-            "display": "Mathematics",
-            "value": "Mathematics",
-          },
-          {
-            "display": "Physics",
-            "value": "Physics",
-          },
-          {
-            "display": "Chemistry",
-            "value": "Chemistry",
-          },
-          {
-            "display": "All Science Subject",
-            "value": "All Science Subject",
-          },
-          {
-            "display": "All Subject",
-            "value": "All Subject",
-          },
-          {
-            "display": "All Business Studies Subject",
-            "value": "All Business Studies Subject",
-          },
-          {
-            "display": "Economics",
-            "value": "Economics",
-          },
-          {
-            "display": "Accounting",
-            "value": "Accounting",
-          },
-          {
-            "display": "Business Organization and Management",
-            "value": "Business Organization and Management",
-          },
-          {
-            "display": "Finance, Banking, and Insurance",
-            "value": "Finance, Banking, and Insurance",
-          },
-          {
-            "display": "Information and Communication Technology",
-            "value": "Information and Communication Technology",
-          },
-         
-        ],
-        textField: 'display',
-        valueField: 'value',
-        filterable: true,
-        required: true,
-        value: user.subject[0],
-        onSaved: (value) {
-          user.subject = value;
-        });
-  }
 
   Widget emailField() {
     return new TextFormField(
@@ -331,6 +229,7 @@ Widget subjectField() {
 
   Widget mobileField() {
     return new TextFormField(
+      readOnly: true,
         decoration: InputDecoration(labelText: "Mobile"),
          initialValue: user.mobile,
         onSaved: (val) => user.mobile = val,
@@ -376,7 +275,44 @@ Widget subjectField() {
           }
         });
   }
-
+Widget bloodfield() {
+    return new Container(
+      //width: MediaQuery.of(context).size.height*.3,
+      child:new Row(
+        children: <Widget>[
+          new Text("Blood Group",
+          style: new TextStyle(color: Colors.black, fontSize: 16)),
+          SizedBox(width: 10.0,   ),
+          new DropdownButton(
+        //hint: Text('Please choose a Blood Group'), // Not necessary for Option 1
+          value: user.bloodgroup,
+          onChanged: (newValue) {
+            setState(() {
+              user.bloodgroup = newValue;
+            });
+          },
+          items: bloodes.map((blood) {
+            return DropdownMenuItem(
+              child: new Text(blood),
+              value: blood,
+            );
+          }).toList(),
+        ),
+        ],
+      ) 
+    );
+  }
+    List<String> bloodes = [
+    'A+',
+    'B+',
+    'AB+',
+    'O+',
+    'A-',
+    'B-',
+    'O-',
+    'AB-',
+    
+  ];
   Widget submitButton() {
     return RaisedButton(
       color: Colors.blue,
@@ -384,12 +320,18 @@ Widget subjectField() {
       onPressed: () {
         if (formKey.currentState.validate()) {
           user.gender = gender;
+          if(donor){
+            user.donor="Yes";
+          }
+          else{
+            user.donor="No";
+          }
           formKey.currentState.save();
           edit();
-          //  var router = new MaterialPageRoute(
-          //         builder: (BuildContext context) => new Profile(user));
-          //     Navigator.of(context).pop();
-          //     Navigator.of(context).pushReplacement(router);
+           var router = new MaterialPageRoute(
+                  builder: (BuildContext context) => new MainPage(user.mobile));
+           
+              Navigator.of(context).pushReplacement(router);
         }
       },
     );

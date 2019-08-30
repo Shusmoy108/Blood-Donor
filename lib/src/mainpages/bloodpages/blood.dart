@@ -1,3 +1,5 @@
+import 'package:blooddonor/src/mainpages/bloodpages/donorpage.dart';
+import 'package:blooddonor/src/mainpages/profilepage/profilepage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../../models/user.dart';
@@ -68,10 +70,16 @@ class Bloods extends StatelessWidget {
   Widget buildProductItem(BuildContext context, int index) {
    return Card(
      child:ListTile(
-     title:  stylishText(users[index].username, 20.0),
-     leading: stylishText(users[index].bloodgroup, 25.0),
-     subtitle: stylishText(users[index].address, 15.0),
-     trailing: button(index, context),
+      onTap:(){
+             var router = new MaterialPageRoute(
+                  builder: (BuildContext context) => new  DonorPage(users[index]));
+              Navigator.of(context).push(router);
+      
+      } ,
+      title:  stylishText(users[index].username, 20.0),
+      leading: stylishText(users[index].bloodgroup, 25.0),
+      subtitle: stylishText(users[index].address, 15.0),
+     //trailing: button(index, context),
    ) ,
    ) ;
   }

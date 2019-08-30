@@ -1,3 +1,6 @@
+import 'dart:ui';
+import 'dart:ui' as prefix0;
+
 import 'package:blooddonor/src/mainpages/Bloodpages/bloodpage.dart';
 import 'package:blooddonor/src/mainpages/homepages/mainpage.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -59,22 +62,35 @@ _BlooddonorState(this.m);
       }
     });
   }
-
-  @override
+@override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: new AppBar(
-        title: new Text("Blood Donor"),
-      ),
-      body: new Container(
-        margin: EdgeInsets.all(20),
-        child: Form(
-          key: formKey,
-          child: ListView(
+    return Scaffold(
+      body: Container(
+         decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/drop.jpg"),
+            fit: BoxFit.fill,
+          ),
+        ),
+      child:BackdropFilter(
+        filter:  ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Center(
+        child: Stack(
+            alignment: Alignment.bottomCenter,
             children: <Widget>[
-              errorField(),
-               usernameField(),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+               
+                child: Form(
+                  key: formKey,
+                  child: ListView(
+                   // mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                    //  animatedCcup(),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                          usernameField(),
                  mobileField(),
               bloodfield(),
               emailField(),
@@ -83,16 +99,56 @@ _BlooddonorState(this.m);
             
             //  passwordField(),
               addressField(),
-              Container(
-                margin: EdgeInsets.only(top: 25),
-              ),
+              checkbox(),
+                 SizedBox(
+                        height: 10.0,
+                      ),
               signbutton()
+                  
+                    
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
-        ),
-      ),
-    );
+        
+      ),)
+    ));
   }
+  // @override
+  // Widget build(BuildContext context) {
+  //   return new Scaffold(
+  //     resizeToAvoidBottomPadding: false,
+  //     appBar: new AppBar(
+  //       title: new Text("Blood Donor"),
+  //     ),
+  //     body: new Container(
+  //       margin: EdgeInsets.all(20),
+  //       child: Form(
+  //         key: formKey,
+  //         child: ListView(
+  //           children: <Widget>[
+  //             errorField(),
+  //              usernameField(),
+  //                mobileField(),
+  //             bloodfield(),
+  //             emailField(),
+             
+  //             genderField(),
+            
+  //           //  passwordField(),
+  //             addressField(),
+  //             Container(
+  //               margin: EdgeInsets.only(top: 25),
+  //             ),
+  //             signbutton()
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   bool isNumeric(String s) {
     if (s == null) {
@@ -182,7 +238,7 @@ _BlooddonorState(this.m);
         new Text("Gender",
             style: new TextStyle(color: Colors.black, fontSize: 16)),
         new Radio<int>(
-          activeColor: Colors.pink,
+          activeColor: Colors.blue,
           value: 0,
           groupValue: genderValue,
           onChanged: handleGender,
@@ -198,7 +254,26 @@ _BlooddonorState(this.m);
       ],
     ));
   }
+bool donor=false;
+  Widget checkbox(){
+    return new Container(
+      child: Row(
+        children: <Widget>[
+          Checkbox(
+            value: donor,
+            onChanged: (bool value) {
+                setState(() {
+                    donor = value;
+                });
+            },
+            
+        ),
+        Text("I am a Donor",style:TextStyle(fontFamily: "Arcon",fontSize: 20)),
+        ],
+      ),
+    );
 
+  }
   Widget addressField() {
     return new TextFormField(
         decoration: InputDecoration(labelText: "Address"),
@@ -211,24 +286,30 @@ _BlooddonorState(this.m);
   }
 
 Widget bloodfield() {
-    return new ListTile(
-      leading: new Text("Blood Group",
+    return new Container(
+      //width: MediaQuery.of(context).size.height*.3,
+      child:new Row(
+        children: <Widget>[
+          new Text("Blood Group",
           style: new TextStyle(color: Colors.black, fontSize: 16)),
-      title: DropdownButton(
-        hint: Text('Please choose a Blood Group'), // Not necessary for Option 1
-        value: bloodgrp,
-        onChanged: (newValue) {
-          setState(() {
-            bloodgrp = newValue;
-          });
-        },
-        items: bloodes.map((cls) {
-          return DropdownMenuItem(
-            child: new Text(cls),
-            value: cls,
-          );
-        }).toList(),
-      ),
+          SizedBox(width: 10.0,   ),
+          new DropdownButton(
+        //hint: Text('Please choose a Blood Group'), // Not necessary for Option 1
+          value: bloodgrp,
+          onChanged: (newValue) {
+            setState(() {
+              bloodgrp = newValue;
+            });
+          },
+          items: bloodes.map((blood) {
+            return DropdownMenuItem(
+              child: new Text(blood),
+              value: blood,
+            );
+          }).toList(),
+        ),
+        ],
+      ) 
     );
   }
   Widget submitButton() {
@@ -252,6 +333,12 @@ Widget bloodfield() {
             user.gender=gender;
             user.bloodgroup=bloodgrp;
             user.password="123456";
+             if(donor){
+              user.donor="Yes";
+            }
+            else{
+              user.donor="No";
+            }
             databaseReference
               .orderByChild("mobile")
               .equalTo(user.mobile)
@@ -267,7 +354,7 @@ Widget bloodfield() {
               databaseReference.push().set(user.toJson());
               var router = new MaterialPageRoute(
                   builder: (BuildContext context) => new MainPage(m));
-              Navigator.of(context).push(router);
+              Navigator.of(context).pushReplacement(router);
             } else {
               setState(() {
                 _error = "Mobile number is already exist";
@@ -296,7 +383,8 @@ Widget bloodfield() {
         width: 400,
         height: 40,
         decoration: BoxDecoration(
-          color: Color.fromRGBO(220, 20, 60, 0.8),
+          //color: Color.fromRGBO(220, 20, 60, 0.8),
+          color: Colors.green,
           borderRadius: BorderRadius.circular(30.0),
           boxShadow: [
             //BoxShadow(color: Colors.grey, offset: Offset(1, 2)),

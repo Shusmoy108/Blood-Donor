@@ -1,26 +1,26 @@
 import 'package:blooddonor/src/mainpages/homepages/mainpage.dart';
 import 'package:blooddonor/src/registerpages/loginpage.dart';
 import 'package:flutter/material.dart';
-import 'package:blooddonor/src/mainpages/profilepage/editprofile.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../models/user.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../../models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-class Profile extends StatefulWidget {
+class DonorPage extends StatefulWidget {
   User u;
-  Profile(this.u);
+  DonorPage(this.u);
   @override
   State<StatefulWidget> createState() {
-    return ProfilePage(u);
+    return DonorPagestate(u);
   }
 }
-class ProfilePage extends State<Profile> {
+class DonorPagestate extends State<DonorPage> {
     final FirebaseDatabase database = FirebaseDatabase.instance;
     DatabaseReference databaseReference;
     User u;
     String date;
-    ProfilePage(this.u);
+    DonorPagestate(this.u);
     @override
     void initState() {
     setState(() {
@@ -35,13 +35,20 @@ class ProfilePage extends State<Profile> {
     });
     }
 
-      logout() async {
-        SharedPreferences sp = await SharedPreferences.getInstance();
-        sp.clear();
-        }
+      void _launchURL(m) async {
+    String url = "tel:" + m;
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  } 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: new AppBar(
+        title: Center(child:new Text("Blood HUNT", style: TextStyle(fontFamily: "Arcon",fontWeight: FontWeight.bold),), 
+        ) ),
       body: ListView(
         children: <Widget>[
           Stack(
@@ -69,48 +76,8 @@ class ProfilePage extends State<Profile> {
               //     color: Colors.white,
               //   ),
               // ),
-               Positioned(
-                top: 10,
-                left: 4,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50.0),
-                  child: MaterialButton(
-                    onPressed: () {
-                         logout();
-                           Navigator.of(context).pushReplacement(
-                       MaterialPageRoute(
-                        builder: (context) =>LoginPage(),
-                      ));
-                    },
-                    minWidth: 120.0,
-                    height: 35.0,
-                    color: Colors.redAccent,
-                    textColor: Colors.black87,
-                    child: Text(
-                      'Log OUT',
-                      style: TextStyle(
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                  ),
-                ),
-                
-              ),
-              Positioned(
-                top: 10.0,
-                right: 4,
-                child: IconButton(
-                  icon: Icon(Icons.edit),
-                  color: Colors.white,
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => EditProfile(u),
-                      ),
-                    );
-                  },
-                ),
-              ),
+             
+            
               Align(
                 alignment: FractionalOffset.bottomCenter,
                 heightFactor: 1.4,
@@ -172,37 +139,16 @@ class ProfilePage extends State<Profile> {
                   borderRadius: BorderRadius.circular(50.0),
                   child: MaterialButton(
                     onPressed: () {
-                        DatePicker.showDatePicker(context,
-                              showTitleActions: true,
-                              //minTime: DateTime(2018, 3, 5),
-                              //maxTime: DateTime(2019, 6, 7), 
-                              onChanged: (date) {
-                            //print('change $date');
-                          }, onConfirm: (date) {
-                            int now = date.millisecondsSinceEpoch;
-                            databaseReference = database.reference().child("users/${u.uid}");
-                            databaseReference.update({"donationtime": now, "donationnumber":u.donationnumber+1});
-                            u.donationnumber=u.donationnumber+1;
-                              Navigator.of(context).pushReplacement(
-                       MaterialPageRoute(
-                        builder: (context) =>MainPage(u.mobile),
-                      ),
-                    );
-                            print('confirm $date');
-                            
-                          }, currentTime: DateTime.now(), locale: LocaleType.en);
-                    //   Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => EditProfile(u),
-                    //   ),
-                    // );
+                         String m = u.mobile;
+                         _launchURL(m);
+                        
                     },
                     minWidth: 120.0,
                     height: 35.0,
                     color: Colors.greenAccent,
                     textColor: Colors.black87,
                     child: Text(
-                      'Set Donation Date',
+                      'Call Donor',
                       style: TextStyle(
                         letterSpacing: 1.5,
                       ),

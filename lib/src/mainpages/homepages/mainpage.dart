@@ -1,3 +1,4 @@
+import 'package:blooddonor/src/mainpages/bloodpages/homepage.dart';
 import 'package:blooddonor/src/mainpages/factpage/faqpage.dart';
 import 'package:blooddonor/src/mainpages/profilepage/profilepage.dart';
 
@@ -50,6 +51,7 @@ class _MainPageState extends State<MainPage> {
               );
               u.donationnumber=value['donationnumber'];
               u.donationtime=value['donationtime'];
+              u.donor=value['donor'];
               //u.etuition=value["etuition"];
           //print(value);
           // String x = value["number"];
@@ -61,7 +63,7 @@ class _MainPageState extends State<MainPage> {
             u.uid = key;
           }
          _pages=[
-         BloodsPage(email),
+         HomePage(email),
          Profile(u),
         FAQPage()
         ];
@@ -93,10 +95,10 @@ class _MainPageState extends State<MainPage> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.list,
+              Icons.home,
             ),
             title: Text(
-              'Donor List',
+              'Home',
             ),
           ),
           BottomNavigationBarItem(

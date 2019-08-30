@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_multiselect/flutter_multiselect.dart';
 import '../models/user.dart';
 import 'loginpage.dart';
+import 'dart:ui';
 
 class SignUp extends StatelessWidget {
   // This widget is the root of your application.
@@ -74,22 +75,55 @@ class _SignUpState extends State<SignUpPage> {
       }
     });
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: new AppBar(
-        title: new Text("Blood Donor"),
+bool donor=false;
+  Widget checkbox(){
+    return new Container(
+      child: Row(
+        children: <Widget>[
+          Checkbox(
+            value: donor,
+            onChanged: (bool value) {
+                setState(() {
+                    donor = value;
+                });
+            },
+            
+        ),
+        Text("I am a Donor",style:TextStyle(fontFamily: "Arcon",fontSize: 20)),
+        ],
       ),
-      body: new Container(
-        margin: EdgeInsets.all(20),
-        child: Form(
-          key: formKey,
-          child: ListView(
+    );
+
+  }
+ @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+         decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/drop.jpg"),
+            fit: BoxFit.fill,
+          ),
+        ),
+      child:BackdropFilter(
+        filter:  ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Center(
+        child: Stack(
+            alignment: Alignment.bottomCenter,
             children: <Widget>[
-              errorField(),
-               usernameField(),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+               
+                child: Form(
+                  key: formKey,
+                  child: ListView(
+                   // mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                    //  animatedCcup(),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                          usernameField(),
                  mobileField(),
               bloodfield(),
               emailField(),
@@ -98,17 +132,23 @@ class _SignUpState extends State<SignUpPage> {
             
               passwordField(),
               addressField(),
-              Container(
-                margin: EdgeInsets.only(top: 25),
-              ),
+              checkbox(),
+                 SizedBox(
+                        height: 10.0,
+                      ),
               signbutton()
+                  
+                    
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
-        ),
-      ),
-    );
+        
+      ),)
+    ));
   }
-
   bool isNumeric(String s) {
     if (s == null) {
       return false;
@@ -197,7 +237,7 @@ class _SignUpState extends State<SignUpPage> {
         new Text("Gender",
             style: new TextStyle(color: Colors.black, fontSize: 16)),
         new Radio<int>(
-          activeColor: Colors.pink,
+          activeColor: Colors.green,
           value: 0,
           groupValue: genderValue,
           onChanged: handleGender,
@@ -226,24 +266,30 @@ class _SignUpState extends State<SignUpPage> {
   }
 
 Widget bloodfield() {
-    return new ListTile(
-      leading: new Text("Blood Group",
+    return new Container(
+      //width: MediaQuery.of(context).size.height*.3,
+      child:new Row(
+        children: <Widget>[
+          new Text("Blood Group",
           style: new TextStyle(color: Colors.black, fontSize: 16)),
-      title: DropdownButton(
-        hint: Text('Please choose a Blood Group'), // Not necessary for Option 1
-        value: bloodgrp,
-        onChanged: (newValue) {
-          setState(() {
-            bloodgrp = newValue;
-          });
-        },
-        items: bloodes.map((cls) {
-          return DropdownMenuItem(
-            child: new Text(cls),
-            value: cls,
-          );
-        }).toList(),
-      ),
+          SizedBox(width: 10.0,   ),
+          new DropdownButton(
+        //hint: Text('Please choose a Blood Group'), // Not necessary for Option 1
+          value: bloodgrp,
+          onChanged: (newValue) {
+            setState(() {
+              bloodgrp = newValue;
+            });
+          },
+          items: bloodes.map((blood) {
+            return DropdownMenuItem(
+              child: new Text(blood),
+              value: blood,
+            );
+          }).toList(),
+        ),
+        ],
+      ) 
     );
   }
   Widget submitButton() {
@@ -266,6 +312,12 @@ Widget bloodfield() {
             formKey.currentState.save();
             user.gender=gender;
             user.bloodgroup=bloodgrp;
+            if(donor){
+              user.donor="Yes";
+            }
+            else{
+              user.donor="No";
+            }
             databaseReference
               .orderByChild("mobile")
               .equalTo(user.mobile)
@@ -279,7 +331,7 @@ Widget bloodfield() {
             //save form data to the database
             databaseReference.push().set(user.toJson());
             var router = new MaterialPageRoute(
-                builder: (BuildContext context) => new prefix0.BloodsPage(user.mobile));
+                builder: (BuildContext context) => new MainPage(user.mobile));
             Navigator.of(context).pushReplacement(router);
               formKey.currentState.reset();
 
@@ -305,7 +357,8 @@ Widget bloodfield() {
         width: 400,
         height: 40,
         decoration: BoxDecoration(
-          color: Color.fromRGBO(220, 20, 60, 0.8),
+          ///color: Color.fromRGBO(220, 20, 60, 0.8),
+          color: Colors.green,
           borderRadius: BorderRadius.circular(30.0),
           boxShadow: [
             //BoxShadow(color: Colors.grey, offset: Offset(1, 2)),

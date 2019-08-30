@@ -1,11 +1,12 @@
-import 'package:blooddonor/src/mainpages/bloodpages/bloodpage.dart';
 import 'package:blooddonor/src/mainpages/homepages/mainpage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user.dart';
 import 'signup.dart';
+import 'dart:ui';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -125,6 +126,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       style: new TextStyle(fontSize: 20, color: Colors.greenAccent),
     );
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +138,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             fit: BoxFit.fill,
           ),
         ),
-      child: Center(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 3,sigmaY: 3),
+        child: Center(
         child: Stack(
             alignment: Alignment.bottomCenter,
             children: <Widget>[
@@ -169,7 +173,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           ),
         
       ),
-    ));
+    )));
   }
 
   Widget animatedCcup() {
