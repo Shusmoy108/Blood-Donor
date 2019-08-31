@@ -39,6 +39,70 @@ class ProfilePage extends State<Profile> {
         SharedPreferences sp = await SharedPreferences.getInstance();
         sp.clear();
         }
+  Widget setdate(){
+    DateTime date2 = DateTime.now();
+    DateTime d= new DateTime.fromMillisecondsSinceEpoch(u.donationtime);
+    if(date2.difference(d).inDays>120){
+      return  Positioned(
+                top: MediaQuery.of(context).size.height * 0.6 - 27,
+                left: MediaQuery.of(context).size.width * 0.5 - 60,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50.0),
+                  child: MaterialButton(
+                    onPressed: () {
+                        DatePicker.showDatePicker(context,
+                              showTitleActions: true,
+                              //minTime: DateTime(2018, 3, 5),
+                              //maxTime: DateTime(2019, 6, 7), 
+                              onChanged: (date) {
+                            //print('change $date');
+                          }, onConfirm: (date) {
+                            int now = date.millisecondsSinceEpoch;
+                            databaseReference = database.reference().child("users/${u.uid}");
+                            databaseReference.update({"donationtime": now, "donationnumber":u.donationnumber+1});
+                            u.donationnumber=u.donationnumber+1;
+                              Navigator.of(context).pushReplacement(
+                       MaterialPageRoute(
+                        builder: (context) =>MainPage(u.mobile),
+                      ),
+                    );
+                            print('confirm $date');
+                            
+                          }, currentTime: DateTime.now(), locale: LocaleType.en);
+                    //   Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => EditProfile(u),
+                    //   ),
+                    // );
+                    },
+                    minWidth: 120.0,
+                    height: 35.0,
+                    color: Colors.greenAccent,
+                    textColor: Colors.black87,
+                    child: Text(
+                      'Set Donation Date',
+                      style: TextStyle(
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                  ),
+                )
+                
+              );
+    }
+    else{
+      
+      String s=(120- date2.difference(d).inDays).toString()+" Days Remaining For Blood Donation";
+      return Positioned(
+                top: MediaQuery.of(context).size.height * 0.6 - 27,
+                right: MediaQuery.of(context).size.width*0.2 -27,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50.0),
+                  child: new Text(
+        s, style: TextStyle(fontFamily: "Lobster",fontSize: 20, ),
+      )));
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -165,52 +229,7 @@ class ProfilePage extends State<Profile> {
                   ],
                 ),
               ),
-              Positioned(
-                top: MediaQuery.of(context).size.height * 0.6 - 27,
-                left: MediaQuery.of(context).size.width * 0.5 - 60,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50.0),
-                  child: MaterialButton(
-                    onPressed: () {
-                        DatePicker.showDatePicker(context,
-                              showTitleActions: true,
-                              //minTime: DateTime(2018, 3, 5),
-                              //maxTime: DateTime(2019, 6, 7), 
-                              onChanged: (date) {
-                            //print('change $date');
-                          }, onConfirm: (date) {
-                            int now = date.millisecondsSinceEpoch;
-                            databaseReference = database.reference().child("users/${u.uid}");
-                            databaseReference.update({"donationtime": now, "donationnumber":u.donationnumber+1});
-                            u.donationnumber=u.donationnumber+1;
-                              Navigator.of(context).pushReplacement(
-                       MaterialPageRoute(
-                        builder: (context) =>MainPage(u.mobile),
-                      ),
-                    );
-                            print('confirm $date');
-                            
-                          }, currentTime: DateTime.now(), locale: LocaleType.en);
-                    //   Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => EditProfile(u),
-                    //   ),
-                    // );
-                    },
-                    minWidth: 120.0,
-                    height: 35.0,
-                    color: Colors.greenAccent,
-                    textColor: Colors.black87,
-                    child: Text(
-                      'Set Donation Date',
-                      style: TextStyle(
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                  ),
-                ),
-                
-              ),
+             setdate()
             ],
           ),
           Container(

@@ -1,6 +1,5 @@
 import 'package:blooddonor/src/mainpages/homepages/mainpage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,7 +22,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final FirebaseDatabase database = FirebaseDatabase.instance;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   DatabaseReference databaseReference;
-  String _email, _password, _error = "";
+  String _error = "";
 
 
   @override
@@ -47,11 +46,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   void login() {
-    //  var router = new MaterialPageRoute(
-    //           builder: (BuildContext context) => new BloodsPage()
-              
-    //           );
-    //       Navigator.of(context).pushReplacement(router);
     databaseReference
         .orderByChild("mobile")
         .equalTo(email)
@@ -68,25 +62,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               value["username"],
               value["gender"],
               value["address"],
-                 value["bloodgroup"],
-              // value["area"],
-              // value["department"],
-              // value["institution"],
+              value["bloodgroup"],
               value["mobile"],
               value["password"],
               value["email"],
-           
-              // value["rating"],
-              // value["number"],
-              // value["subject"]
-              );
-              //u.etuition=value["etuition"];
-          //print(value);
-          // String x = value["number"];
-          // u.number = int.parse(x);
-          // // u.rating = value["rating"];
-         // print(u.number);
-         // print(u.rating);
+          );
           for (var key in onValue.value.keys) {
             u.uid = key;
           }
@@ -97,7 +77,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               );
           Navigator.of(context).pushReplacement(router);
         } else {
-          print("fdds");
+  
           setState(() {
             _error = "Incorrect Email or Password";
           });
@@ -109,15 +89,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         _error = "Incorrect Email or Password";
       });
     });
-    // if (email == 'ab@xy.com' && password == '12345') {
-    //   Navigator.of(context).pushReplacement(
-    //     MaterialPageRoute(
-    //       builder: (BuildContext context) {
-    //         return MainPage();
-    //       },
-    //     ),
-    //   );
-    // }
   }
 
   Widget errorField() {
@@ -176,21 +147,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     )));
   }
 
-  Widget animatedCcup() {
-    return Container(
-      child: Center(
-        child: Container(
-          // width: 500,
-          // height: 100,
-          child: Image(
-            image: AssetImage(
-              'images/blood.jpg',
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+
 
  Widget emailField() {
     return TextFormField(
@@ -204,7 +161,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           color: Colors.black87,
         ),
       ),
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: TextInputType.number,
       autovalidate: _autovalidateLoginform,
       validator: (String value) {
         if (isNumeric(value)&& value.length==11)
@@ -289,25 +246,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget submitButton() {
-    return RaisedButton(
-      //icon: Icon(Icons.navigate_next),
-      child: Text('Login'),
-      color: Colors.blue,
 
-      textColor: Colors.white,
-      onPressed: () {
-        if (loginFormKey.currentState.validate()) {
-          loginFormKey.currentState.save();
-          login();
-        } else {
-          setState(() {
-            _autovalidateLoginform = true;
-          });
-        }
-      },
-    );
-  }
 
   Widget forgetPassowrd() {
     return Container(

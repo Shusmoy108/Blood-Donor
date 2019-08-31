@@ -25,8 +25,8 @@ class HomePageState extends State<HomePage> {
   String text="";
   final FirebaseDatabase database = FirebaseDatabase.instance;
   DatabaseReference databaseReference;
-  int donor=40;
-  int user=50;
+  int donor=41;
+  int user=53;
   @override
   void initState() {
     setState(() {
@@ -50,26 +50,7 @@ class HomePageState extends State<HomePage> {
     });
   }
 
-  Future<bool> _onWillPop() {
-    return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-                title: new Text('Are you sure?'),
-                content: new Text('Do you want to exit Tuition Hub'),
-                actions: <Widget>[
-                  new FlatButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: new Text('No'),
-                  ),
-                  new FlatButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    child: new Text('Yes'),
-                  ),
-                ],
-              ),
-        ) ??
-        false;
-  }
+
 
 String bloodgrp="";
   
@@ -88,9 +69,19 @@ String bloodgrp="";
   String blds="A+";
 Widget bloodfield() {
     return new Container(
-      width: MediaQuery.of(context).size.width*.4,
-      child:new Row(
+      //color: Colors.white,
+      width:150,
+      height: 60,
+       decoration: BoxDecoration(
+          color: Color.fromRGBO(220, 20, 60, 0.8),
+          borderRadius: BorderRadius.circular(20.0),
+          boxShadow: [
+            //BoxShadow(color: Colors.grey, offset: Offset(1, 2)),
+          ],
+        ),
+      child: new Row(
         children: <Widget>[
+          SizedBox(width: 10,),
           new Text("Blood Group",
           style: new TextStyle(color: Colors.black, fontSize: 15,fontFamily:"Lobster" )),
           SizedBox(width: 10.0,   ),
@@ -115,7 +106,8 @@ Widget bloodfield() {
   }
   Widget emailField() {
     return new Container(
-      width: MediaQuery.of(context).size.width*.35,
+      width:150,
+      height: 60,
       child: TextField(
                 onChanged: (value) {
                   setState(() {
@@ -125,9 +117,9 @@ Widget bloodfield() {
                 },
                 //controller: editingController,
                 decoration: InputDecoration(
-                    labelText: "Search",
-                    hintText: "Search",
-                    prefixIcon: Icon(Icons.search),
+                    labelText: "Location",
+                    hintText: "Location",
+                   // prefixIcon: Icon(Icons.search),
                     //prefixIcon: new Icon(FontAwesomeIcons.tint,color: Colors.red,),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)))),
@@ -143,11 +135,11 @@ Widget searchbutton() {
               Navigator.of(context).push(router);
       },
       child: Container(
-        width: 100,
-        height: 40,
+        width: 80,
+        height: 80,
         decoration: BoxDecoration(
           color: Color.fromRGBO(220, 20, 60, 0.8),
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(80.0),
           boxShadow: [
             //BoxShadow(color: Colors.grey, offset: Offset(1, 2)),
           ],
@@ -156,10 +148,8 @@ Widget searchbutton() {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Search',
-              style: TextStyle(
-                  color: Colors.white, fontSize: 15.0, fontFamily: 'Merienda'),
+            Icon(
+              Icons.search,size: 60,
             ),
             SizedBox(
               width: 0.0,
@@ -169,11 +159,31 @@ Widget searchbutton() {
       ),
     );
   }
+  Widget searchfields(context){
+  if(MediaQuery.of(context).size.width>350){
+     return Row(
+       mainAxisAlignment: MainAxisAlignment.center,
+       children: <Widget>[
+         bloodfield(),
+         SizedBox(width: 20.0,),
+         emailField(),
+         ]);
+         }
+  else{
+     return Column(
+       mainAxisAlignment: MainAxisAlignment.center,
+       children: <Widget>[
+         bloodfield(),
+         SizedBox(height: 20.0,),
+         emailField(),
+         ]);
+  }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
-        title: Center(child:new Text("Blood HUNT", style: TextStyle(fontFamily: "Arcon",fontWeight: FontWeight.bold),), 
+        title: Center(child:new Text("BloodHunt", style: TextStyle(fontFamily: "Arcon",fontWeight: FontWeight.bold),), 
         ) 
       ),
           body: Container(
@@ -188,17 +198,15 @@ Widget searchbutton() {
               //margin: EdgeInsets.all(10.0),
               child: ListView(
                 children: <Widget>[
-                  SizedBox(height: 20.0,),
+                  //SizedBox(height: 10.0,),
                   Container(
-                    height: MediaQuery.of(context).size.height*.32,
-                    decoration: BoxDecoration(
-                      color: Colors.white70,
-                      borderRadius: BorderRadius.all(Radius.circular(25.0)),),
+                    //height: 400,
+                   
                     margin: EdgeInsets.all(10.0),
            
                     child: Column(
                       children: <Widget>[
-                        SizedBox(height: 20.0,),
+                        //SizedBox(height: 20.0,),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -206,20 +214,18 @@ Widget searchbutton() {
                             new Icon(FontAwesomeIcons.tint,color: Colors.red,size: 30,)
                             ],),
                         SizedBox(height: 20.0,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            bloodfield(),
-                            emailField(),
-                            ]),
+                     searchfields(context),
+                       
                         SizedBox(height: 20.0,),
                         searchbutton()],
                         ) ),
-                        SizedBox(height: 40.0,),
+                        //SizedBox(height: 60.0,),
                        Container(
-                         height: MediaQuery.of(context).size.height*.2,
+                        
+                         //height:400,
                          decoration: BoxDecoration(
                            color: Colors.white70,
+                           
                            borderRadius: BorderRadius.all(Radius.circular(25.0)),),
                            margin: EdgeInsets.all(10.0),
                            child: Row(
@@ -228,18 +234,18 @@ Widget searchbutton() {
                                Column(
                                  mainAxisAlignment: MainAxisAlignment.center,
                                  children: <Widget>[
-                                    Text("Users",style: TextStyle(fontFamily: "Lobster",fontSize: 45),),
+                                    Text("Users",style: TextStyle(fontFamily: "Lobster",fontSize: 30),),
                                     SizedBox(height: 10.0,),
-                                      Text(user.toString(),style: TextStyle(fontFamily: "Lobster",fontSize: 45),),
+                                      Text(user.toString(),style: TextStyle(fontFamily: "Lobster",fontSize: 30),),
                                  ],
                                ),
                               SizedBox(width: 60.0,),
                               Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                  children: <Widget>[
-                                    Text("Donors",style: TextStyle(fontFamily: "Lobster",fontSize: 45),),
+                                    Text("Donors",style: TextStyle(fontFamily: "Lobster",fontSize: 30),),
                                       SizedBox(height: 10.0,),
-                                      Text(donor.toString(),style: TextStyle(fontFamily: "Lobster",fontSize: 45),),
+                                      Text(donor.toString(),style: TextStyle(fontFamily: "Lobster",fontSize: 30),),
                                  ],
                                )
                              ],

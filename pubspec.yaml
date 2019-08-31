@@ -51,14 +51,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - images/face.png
-    - images/tution.jpg
-    - images/tution.gif
     - images/pp.gif
-    - images/home2.gif
-    - images/logo.jpg
     - images/home.jpg
-    - images/home3.png
     - images/blood.jpg
     - images/FAQ.jpg
     - images/drop.jpg

@@ -1,12 +1,9 @@
-import 'package:blooddonor/src/mainpages/homepages/mainpage.dart';
-import 'package:blooddonor/src/registerpages/loginpage.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../models/user.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../../models/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 class DonorPage extends StatefulWidget {
   User u;
   DonorPage(this.u);
@@ -69,15 +66,6 @@ class DonorPagestate extends State<DonorPage> {
                   ),
                 ),
               ),
-              // Positioned(
-              //   top: 10.0,
-              //   left: 4,
-              //   child: BackButton(
-              //     color: Colors.white,
-              //   ),
-              // ),
-             
-            
               Align(
                 alignment: FractionalOffset.bottomCenter,
                 heightFactor: 1.4,
@@ -116,19 +104,6 @@ class DonorPagestate extends State<DonorPage> {
                     SizedBox(
                       height: 20.0,
                     ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: <Widget>[
-                    //      SmoothStarRating(
-                    //     allowHalfRating: false,
-                    //     starCount: 5,
-                    //     rating: double.parse(u.rating),
-                    //     size: 40.0,
-                    //     color: Colors.green,
-                    //     borderColor: Colors.green,
-                    //   ),
-                    //   ],
-                    // ),
                   ],
                 ),
               ),
@@ -280,95 +255,6 @@ class DonorPagestate extends State<DonorPage> {
               ],
             ),
           ),
-          // Container(
-          //   padding: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 10.0),
-          //   child: Column(
-          //     crossAxisAlignment: CrossAxisAlignment.stretch,
-          //     children: <Widget>[
-          //       Container(
-          //         padding: EdgeInsets.only(bottom: 5.0),
-          //         child: Row(
-          //           children: <Widget>[
-          //             Icon(
-          //               Icons.pin_drop,
-          //               size: 14.0,
-          //               color: Color.fromRGBO(0, 0, 0, 0.7),
-          //             ),
-          //             SizedBox(
-          //               width: 5.0,
-          //             ),
-          //             Text(
-          //               'Donation Details',
-          //               style: TextStyle(
-          //                 letterSpacing: 1.2,
-          //                 color: Color.fromRGBO(0, 0, 0, 0.7),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //         decoration: BoxDecoration(
-          //           border: Border(
-          //             bottom: BorderSide(
-          //               color: Colors.grey,
-          //               width: 0.5,
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          //       SizedBox(
-          //         height: 10.0,
-          //       ),
-          //     Row(
-          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: <Widget>[
-          //           Text(
-          //             'Donation Number:',
-          //             style: TextStyle(
-          //               fontSize: 13,
-          //               color: Color.fromRGBO(0, 0, 0, 0.8),
-          //             ),
-          //           ),
-          //           Container(
-          //             width: 220,
-          //             child: Text(
-          //               u.donationnumber.toString(),
-          //               style: TextStyle(
-          //                 fontSize: 13,
-          //                 color: Color.fromRGBO(0, 0, 0, 0.8),
-          //               ),
-          //               textDirection: TextDirection.rtl,
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //         Row(
-          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: <Widget>[
-          //           Text(
-          //             'Donation Date:',
-          //             style: TextStyle(
-          //               fontSize: 13,
-          //               color: Color.fromRGBO(0, 0, 0, 0.8),
-          //             ),
-          //           ),
-          //           Container(
-          //             width: 220,
-          //             child: Text(
-          //             date,
-          //               style: TextStyle(
-          //                 fontSize: 13,
-          //                 color: Color.fromRGBO(0, 0, 0, 0.8),
-          //               ),
-          //               textDirection: TextDirection.rtl,
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ],
-          //   ),
-          // ),
           SafeArea(
             child: Container(
               padding: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 10.0),

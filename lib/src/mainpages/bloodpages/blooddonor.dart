@@ -1,7 +1,4 @@
 import 'dart:ui';
-import 'dart:ui' as prefix0;
-
-import 'package:blooddonor/src/mainpages/Bloodpages/bloodpage.dart';
 import 'package:blooddonor/src/mainpages/homepages/mainpage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +62,9 @@ _BlooddonorState(this.m);
 @override
   Widget build(BuildContext context) {
     return Scaffold(
+       appBar: new AppBar(
+        title: Center(child:new Text("Blood HUNT", style: TextStyle(fontFamily: "Arcon",fontWeight: FontWeight.bold),), 
+        ) ),
       body: Container(
          decoration: BoxDecoration(
           image: DecorationImage(
@@ -116,40 +116,7 @@ _BlooddonorState(this.m);
       ),)
     ));
   }
-  // @override
-  // Widget build(BuildContext context) {
-  //   return new Scaffold(
-  //     resizeToAvoidBottomPadding: false,
-  //     appBar: new AppBar(
-  //       title: new Text("Blood Donor"),
-  //     ),
-  //     body: new Container(
-  //       margin: EdgeInsets.all(20),
-  //       child: Form(
-  //         key: formKey,
-  //         child: ListView(
-  //           children: <Widget>[
-  //             errorField(),
-  //              usernameField(),
-  //                mobileField(),
-  //             bloodfield(),
-  //             emailField(),
-             
-  //             genderField(),
-            
-  //           //  passwordField(),
-  //             addressField(),
-  //             Container(
-  //               margin: EdgeInsets.only(top: 25),
-  //             ),
-  //             signbutton()
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
+ 
   bool isNumeric(String s) {
     if (s == null) {
       return false;
@@ -198,27 +165,7 @@ _BlooddonorState(this.m);
         });
   }
 
-  Widget institutionField() {
-    return new TextFormField(
-        decoration: InputDecoration(labelText: "Institution Name"),
-        onSaved: (val) => user.institution = val,
-        validator: (String value) {
-          if (value == "") {
-            return "Institution name is required";
-          }
-        });
-  }
-
-  Widget departmentField() {
-    return new TextFormField(
-        decoration: InputDecoration(labelText: "Department"),
-        onSaved: (val) => user.department = val,
-        validator: (String value) {
-          if (value == "") {
-            return "Department is required";
-          }
-        });
-  }
+  
 
   Widget mobileField() {
     return new TextFormField(
@@ -312,18 +259,7 @@ Widget bloodfield() {
       ) 
     );
   }
-  Widget submitButton() {
-    return RaisedButton(
-      color: Colors.blue,
-      child: Text("Sign Up"),
-      onPressed: () {
-        if (formKey.currentState.validate()) {
-           databaseReference.push().set(user.toJson());
-             
-        }
-      },
-    );
-  }
+
   
   Widget signbutton() {
     return InkWell(
@@ -368,15 +304,6 @@ Widget bloodfield() {
             //save form data to the database
          
           });
-
-
-
-          //  databaseReference.push().set(user.toJson());
-          //    formKey.currentState.reset();
-          //      var router = new MaterialPageRoute(
-          //         builder: (BuildContext context) => new BloodsPage());
-
-          //     Navigator.of(context).pushReplacement(router);
         }
       },
       child: Container(

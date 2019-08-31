@@ -1,6 +1,8 @@
 import 'package:blooddonor/src/mainpages/bloodpages/homepage.dart';
+import 'package:blooddonor/src/mainpages/bloodstoriespage/bloodstoriespage.dart';
 import 'package:blooddonor/src/mainpages/factpage/faqpage.dart';
 import 'package:blooddonor/src/mainpages/profilepage/profilepage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../bloodpages/bloodpage.dart';
 import '../../models/user.dart';
@@ -23,6 +25,26 @@ class _MainPageState extends State<MainPage> {
   final FirebaseDatabase database = FirebaseDatabase.instance;
   DatabaseReference databaseReference;
   var _pages = [];
+    Future<bool> _onWillPop() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+                title: new Text('Are you sure?'),
+                content: new Text('Do you want to exit BloodHunt'),
+                actions: <Widget>[
+                  new FlatButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: new Text('No'),
+                  ),
+                  new FlatButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: new Text('Yes'),
+                  ),
+                ],
+              ),
+        ) ??
+        false;
+  }
   Future<bool> loadAuthData(emial) async {
   
        databaseReference = database.reference().child("users");
@@ -37,41 +59,24 @@ class _MainPageState extends State<MainPage> {
               value["username"],
               value["gender"],
               value["address"],
-                 value["bloodgroup"],
-              // value["area"],
-              // value["department"],
-              // value["institution"],
+              value["bloodgroup"],
               value["mobile"],
               value["password"],
               value["email"],
-           
-              // value["rating"],
-              // value["number"],
-              // value["subject"]
               );
               u.donationnumber=value['donationnumber'];
               u.donationtime=value['donationtime'];
               u.donor=value['donor'];
-              //u.etuition=value["etuition"];
-          //print(value);
-          // String x = value["number"];
-          // u.number = int.parse(x);
-          // // u.rating = value["rating"];
-         // print(u.number);
-         // print(u.rating);
           for (var key in onValue.value.keys) {
             u.uid = key;
           }
          _pages=[
          HomePage(email),
          Profile(u),
-        FAQPage()
+         FAQPage(),
+         BloodstoriesPage(u)
         ];
-       
-    
         }});
-        
-   
     return true;
   }
    @override
@@ -80,20 +85,22 @@ class _MainPageState extends State<MainPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child:FutureBuilder(
         future: loadAuthData(email),
-       builder: (context, snapshot) {
+        builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data) {
               return Scaffold(
-      body: Container(
+        body: Container(
         child:_pages[_selectedIndex]
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        fixedColor: Color.fromRGBO(220, 20, 60, 1.0),
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          fixedColor: Color.fromRGBO(220, 20, 60, 1.0),
+          items: <BottomNavigationBarItem>[
+           BottomNavigationBarItem(
             icon: Icon(
               Icons.home,
             ),
@@ -117,6 +124,14 @@ class _MainPageState extends State<MainPage> {
               'FAQ',
             ),
           ),
+           BottomNavigationBarItem(
+            icon: Icon(
+              FontAwesomeIcons.penNib,
+            ),
+            title: Text(
+              'Blood Stories',
+            ),
+          ),
         ],
         currentIndex: _selectedIndex,
         onTap: (int index) {
@@ -133,6 +148,6 @@ class _MainPageState extends State<MainPage> {
             return Container();
           }
         },
-      );
+      ) ,) ;
   }
 }

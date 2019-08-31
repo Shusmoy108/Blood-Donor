@@ -3,7 +3,7 @@ import 'package:blooddonor/src/mainpages/bloodpages/bloodpage.dart' as prefix0;
 import 'package:blooddonor/src/mainpages/homepages/mainpage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_multiselect/flutter_multiselect.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user.dart';
 import 'loginpage.dart';
 import 'dart:ui';
@@ -197,28 +197,7 @@ bool donor=false;
         });
   }
 
-  Widget institutionField() {
-    return new TextFormField(
-        decoration: InputDecoration(labelText: "Institution Name"),
-        onSaved: (val) => user.institution = val,
-        validator: (String value) {
-          if (value == "") {
-            return "Institution name is required";
-          }
-        });
-  }
-
-  Widget departmentField() {
-    return new TextFormField(
-        decoration: InputDecoration(labelText: "Department"),
-        onSaved: (val) => user.department = val,
-        validator: (String value) {
-          if (value == "") {
-            return "Department is required";
-          }
-        });
-  }
-
+  
   Widget mobileField() {
     return new TextFormField(
         decoration: InputDecoration(labelText: "Mobile"),
@@ -292,19 +271,14 @@ Widget bloodfield() {
       ) 
     );
   }
-  Widget submitButton() {
-    return RaisedButton(
-      color: Colors.blue,
-      child: Text("Sign Up"),
-      onPressed: () {
-        if (formKey.currentState.validate()) {
-           databaseReference.push().set(user.toJson());
-             
-        }
-      },
-    );
-  }
   
+  saveAuthData(bool value, User u) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setBool('auth', value);
+    sp.setString("mobile", u.mobile);
+  }
+
+
   Widget signbutton() {
     return InkWell(
       onTap: () {
@@ -329,6 +303,7 @@ Widget bloodfield() {
               });
                 formKey.currentState.reset();
             //save form data to the database
+            saveAuthData(true, user);
             databaseReference.push().set(user.toJson());
             var router = new MaterialPageRoute(
                 builder: (BuildContext context) => new MainPage(user.mobile));

@@ -15,8 +15,8 @@ class _FAQPageState extends State<FAQPage> with TickerProviderStateMixin {
     return Card(
       child: ListTile(
       
-      title: Text(question, style: TextStyle(fontFamily: "Lobster",fontSize: 20),),
-      subtitle: Text(answer, style: TextStyle(fontFamily: "Lobster",fontSize: 18)),
+      title: Text(question, style: TextStyle(fontFamily: "Arcon",fontSize: 20),),
+      subtitle: Text(answer, style: TextStyle(fontFamily: "Arcon",fontSize: 18)),
     ),
     );
   }
@@ -25,7 +25,7 @@ class _FAQPageState extends State<FAQPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: Center(child:new Text("Blood HUNT", style: TextStyle(fontFamily: "Arcon",fontWeight: FontWeight.bold),), 
+        title: Center(child:new Text("BloodHunt", style: TextStyle(fontFamily: "Arcon",fontWeight: FontWeight.bold),), 
         ) ),
       body: Container(
          decoration: BoxDecoration(
