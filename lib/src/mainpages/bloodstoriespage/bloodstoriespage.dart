@@ -117,14 +117,14 @@ class BloodstoriesPageState extends State<BloodstoriesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
-        title: Center(child:new Text("BloodHunt", style: TextStyle(fontFamily: "Arcon",fontWeight: FontWeight.bold),), 
-        ) 
-      ),
+      // appBar: new AppBar(
+      //   title: Center(child:new Text("BloodHunt", style: TextStyle(fontFamily: "Arcon",fontWeight: FontWeight.bold),), 
+      //   ) 
+      // ),
           body: Container(
              decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/home.jpg"),
+            image: AssetImage("images/main.png"),
             fit: BoxFit.fill,
              ),
              ),

@@ -59,28 +59,25 @@ _BlooddonorState(this.m);
       }
     });
   }
-@override
+ @override
   Widget build(BuildContext context) {
-    return Scaffold(
-       appBar: new AppBar(
-        title: Center(child:new Text("Blood HUNT", style: TextStyle(fontFamily: "Arcon",fontWeight: FontWeight.bold),), 
-        ) ),
-      body: Container(
+    return  Container(
          decoration: BoxDecoration(
+            color: Colors.white,
           image: DecorationImage(
-            image: AssetImage("images/drop.jpg"),
-            fit: BoxFit.fill,
+            image: AssetImage("images/main.png"),
+            fit: BoxFit.cover,
           ),
         ),
-      child:BackdropFilter(
-        filter:  ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-        child: Center(
+        child:Scaffold(
+          backgroundColor: Colors.white54,
+      body: Container(
+          //color: Colors.white54,
         child: Stack(
             alignment: Alignment.bottomCenter,
             children: <Widget>[
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
-               
                 child: Form(
                   key: formKey,
                   child: ListView(
@@ -97,7 +94,7 @@ _BlooddonorState(this.m);
              
               genderField(),
             
-            //  passwordField(),
+              //passwordField(),
               addressField(),
               checkbox(),
                  SizedBox(
@@ -114,9 +111,8 @@ _BlooddonorState(this.m);
           ),
         
       ),)
-    ));
+    );
   }
- 
   bool isNumeric(String s) {
     if (s == null) {
       return false;
@@ -284,6 +280,15 @@ Widget bloodfield() {
               setState(() {
                 _error = "";
               });
+              user.gender=gender;
+              user.bloodgroup=bloodgrp;
+              user.password="123456";
+              if(donor){
+                user.donor="Yes";
+              }
+              else{
+                user.donor="No";
+              }
               formKey.currentState.reset();
 
               //save form data to the database

@@ -1,7 +1,11 @@
+import 'package:blooddonor/src/mainpages/factpage/faqpage.dart';
 import 'package:blooddonor/src/mainpages/homepages/mainpage.dart';
+import 'package:blooddonor/src/mainpages/mappages/mappage.dart';
+import 'package:blooddonor/src/mainpages/notificationpage/notifications.dart';
 import 'package:blooddonor/src/registerpages/loginpage.dart';
 import 'package:flutter/material.dart';
 import 'package:blooddonor/src/mainpages/profilepage/editprofile.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../models/user.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -39,10 +43,31 @@ class ProfilePage extends State<Profile> {
         SharedPreferences sp = await SharedPreferences.getInstance();
         sp.clear();
         }
+  Future<bool> _onWillPop() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+                title: new Text('Are you sure?'),
+                content: new Text('Do you want to exit রক্তদান'),
+                actions: <Widget>[
+                  new FlatButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: new Text('No'),
+                  ),
+                  new FlatButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: new Text('Yes'),
+                  ),
+                ],
+              ),
+        ) ??
+        false;
+  }
   Widget setdate(){
     DateTime date2 = DateTime.now();
     DateTime d= new DateTime.fromMillisecondsSinceEpoch(u.donationtime);
     if(date2.difference(d).inDays>120){
+     dates="Give Blood and Save Life";
       return  Positioned(
                 top: MediaQuery.of(context).size.height * 0.6 - 27,
                 left: MediaQuery.of(context).size.width * 0.5 - 60,
@@ -93,19 +118,87 @@ class ProfilePage extends State<Profile> {
     else{
       
       String s=(120- date2.difference(d).inDays).toString()+" Days Remaining For Blood Donation";
+      dates=s;
       return Positioned(
                 top: MediaQuery.of(context).size.height * 0.6 - 27,
-                right: MediaQuery.of(context).size.width*0.2 -27,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50.0),
-                  child: new Text(
-        s, style: TextStyle(fontFamily: "Lobster",fontSize: 20, ),
-      )));
+               right: MediaQuery.of(context).size.width*0.2 -27,
+                child:Container(child:   new Text("", style: TextStyle(fontFamily: "Lobster",fontSize: 20, ),textAlign: TextAlign.center,)
+                ,
+                ) 
+                );
     }
   }
+  String dates="";
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child:Scaffold(
+      //    appBar:AppBar(
+      //   title: Center(child:Text("রক্তদান")) ,
+      // ) ,
+//     drawer: Drawer(
+//   // Add a ListView to the drawer. This ensures the user can scroll
+//   // through the options in the drawer if there isn't enough vertical
+//   // space to fit everything.
+//   child: ListView(
+//     // Important: Remove any padding from the ListView.
+//     padding: EdgeInsets.zero,
+//     children: <Widget>[
+//       DrawerHeader(
+//         child:  Center(child:Text("রক্তদান",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),)),
+//         decoration: BoxDecoration(
+//           color: Colors.red,
+//         ),
+//       ),
+//        ListTile(
+//         title: Text('Home'),
+//         onTap: () {
+//           Navigator.of(context).pushReplacement(
+//                        MaterialPageRoute(
+//                         builder: (context) =>MapSample(u.mobile),
+//                       ));
+          
+//           // Update the state of the app.
+//           // ...
+//         },
+//       ),
+//       ListTile(
+//         title: Text('Profile'),
+//         onTap: () {
+//           Navigator.of(context).pushReplacement(
+//                        MaterialPageRoute(
+//                         builder: (context) =>Profile(u),
+//                       ));
+          
+//           // Update the state of the app.
+//           // ...
+//         },
+//       ),
+//        ListTile(
+//         title: Text('Donation History'),
+//         onTap: () {
+//            Navigator.of(context).pushReplacement(
+//                        MaterialPageRoute(
+//                         builder: (context) =>NotificationPage(u),
+//                       ));
+//           // Update the state of the app.
+//           // ...
+//         },
+//       ),
+//       ListTile(
+//         title: Text('FAQ'),
+//         onTap: () {
+//            Navigator.of(context).pushReplacement(
+//                        MaterialPageRoute(
+//                         builder: (context) => FAQPage(u),
+//                       ));
+        
+//         },
+//       ),
+//     ],
+//   ),
+// ),
       body: ListView(
         children: <Widget>[
           Stack(
@@ -133,33 +226,33 @@ class ProfilePage extends State<Profile> {
               //     color: Colors.white,
               //   ),
               // ),
-               Positioned(
-                top: 10,
-                left: 4,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50.0),
-                  child: MaterialButton(
-                    onPressed: () {
-                         logout();
-                           Navigator.of(context).pushReplacement(
-                       MaterialPageRoute(
-                        builder: (context) =>LoginPage(),
-                      ));
-                    },
-                    minWidth: 120.0,
-                    height: 35.0,
-                    color: Colors.redAccent,
-                    textColor: Colors.black87,
-                    child: Text(
-                      'Log OUT',
-                      style: TextStyle(
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                  ),
-                ),
+              //  Positioned(
+              //   top: 10,
+              //   left: 4,
+              //   child: ClipRRect(
+              //     borderRadius: BorderRadius.circular(50.0),
+              //     child: MaterialButton(
+              //       onPressed: () {
+              //            logout();
+              //              Navigator.of(context).pushReplacement(
+              //          MaterialPageRoute(
+              //           builder: (context) =>LoginPage(),
+              //         ));
+              //       },
+              //       minWidth: 120.0,
+              //       height: 35.0,
+              //       color: Colors.redAccent,
+              //       textColor: Colors.black87,
+              //       child: Text(
+              //         'Log OUT',
+              //         style: TextStyle(
+              //           letterSpacing: 1.5,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
                 
-              ),
+              //),
               Positioned(
                 top: 10.0,
                 right: 4,
@@ -231,6 +324,19 @@ class ProfilePage extends State<Profile> {
               ),
              setdate()
             ],
+          ),
+            Container(
+            padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+            child: Text(
+              dates,
+              style: TextStyle(
+                fontSize: 20.0,
+                fontFamily: "Lobster",
+                //fontStyle: FontStyle.italic,
+                color: Colors.black54,
+              ),
+              textAlign: TextAlign.center,
+            ),
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
@@ -511,6 +617,20 @@ class ProfilePage extends State<Profile> {
           ),
         ],
       ),
-    );
+                     floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+               logout();
+                           Navigator.of(context).pushReplacement(
+                       MaterialPageRoute(
+                        builder: (context) =>LoginPage(),
+                      ));
+            },
+            label: Text(
+              'Log Out',
+            ),
+            icon: Icon(FontAwesomeIcons.signOutAlt),
+            backgroundColor: Color.fromRGBO(220, 20, 60, 0.8),
+          ),
+    ));
   }
 }

@@ -1,16 +1,23 @@
 import 'dart:ui';
 
+import 'package:blooddonor/src/mainpages/mappages/mappage.dart';
+import 'package:blooddonor/src/mainpages/notificationpage/notifications.dart';
+import 'package:blooddonor/src/mainpages/profilepage/profilepage.dart';
+import 'package:blooddonor/src/models/user.dart';
 import 'package:flutter/material.dart';
 
 
 class FAQPage extends StatefulWidget {
+  User u;
+  FAQPage(this.u);
   @override
-  _FAQPageState createState() => _FAQPageState();
+  _FAQPageState createState() => _FAQPageState(u);
 }
 
 class _FAQPageState extends State<FAQPage> with TickerProviderStateMixin {
   
-
+User u;
+_FAQPageState(this.u);
   Widget FAQ(String question,String answer){
     return Card(
       child: ListTile(
@@ -20,19 +27,107 @@ class _FAQPageState extends State<FAQPage> with TickerProviderStateMixin {
     ),
     );
   }
-
+ Future<bool> _onWillPop() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+                title: new Text('Are you sure?'),
+                content: new Text('Do you want to exit রক্তদান'),
+                actions: <Widget>[
+                  new FlatButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: new Text('No'),
+                  ),
+                  new FlatButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: new Text('Yes'),
+                  ),
+                ],
+              ),
+        ) ??
+        false;
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: new AppBar(
-        title: Center(child:new Text("BloodHunt", style: TextStyle(fontFamily: "Arcon",fontWeight: FontWeight.bold),), 
-        ) ),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child:Scaffold(
+      // appBar: new AppBar(
+      //   title: Center(child:new Text("BloodHunt", style: TextStyle(fontFamily: "Arcon",fontWeight: FontWeight.bold),), 
+      //   ) ),
+      // appBar:AppBar(
+      //   title: Center(child:Text("রক্তদান")) ,
+      // ) ,
+//     drawer: Drawer(
+//   // Add a ListView to the drawer. This ensures the user can scroll
+//   // through the options in the drawer if there isn't enough vertical
+//   // space to fit everything.
+//   child: ListView(
+//     // Important: Remove any padding from the ListView.
+//     padding: EdgeInsets.zero,
+//     children: <Widget>[
+//       DrawerHeader(
+//         child:  Center(child:Text("রক্তদান",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),)),
+//         decoration: BoxDecoration(
+//           color: Colors.red,
+//         ),
+//       ),
+//        ListTile(
+//         title: Text('Home'),
+//         onTap: () {
+//           Navigator.of(context).pushReplacement(
+//                        MaterialPageRoute(
+//                         builder: (context) =>MapSample(u.mobile),
+//                       ));
+          
+//           // Update the state of the app.
+//           // ...
+//         },
+//       ),
+//       ListTile(
+//         title: Text('Profile'),
+//         onTap: () {
+//           Navigator.of(context).pushReplacement(
+//                        MaterialPageRoute(
+//                         builder: (context) =>Profile(u),
+//                       ));
+          
+//           // Update the state of the app.
+//           // ...
+//         },
+//       ),
+//        ListTile(
+//         title: Text('Donation History'),
+//         onTap: () {
+//            Navigator.of(context).pushReplacement(
+//                        MaterialPageRoute(
+//                         builder: (context) =>NotificationPage(u),
+//                       ));
+//           // Update the state of the app.
+//           // ...
+//         },
+//       ),
+//       ListTile(
+//         title: Text('FAQ'),
+//         onTap: () {
+//            Navigator.of(context).pushReplacement(
+//                        MaterialPageRoute(
+//                         builder: (context) => FAQPage(u),
+//                       ));
+        
+//         },
+//       ),
+//     ],
+//   ),
+// ),
       body: Container(
+        
          decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/drop.jpg"),
-            fit: BoxFit.fill,
-          ),
+                    color: Color.fromRGBO(234, 239, 241, 1.0),
+          // image: DecorationImage(
+          //   image: AssetImage("images/main.png"),
+          //   fit: BoxFit.fill,
+          // ),
         ),
         child: ListView(
          children: <Widget>[
@@ -49,7 +144,7 @@ class _FAQPageState extends State<FAQPage> with TickerProviderStateMixin {
          ],
         )
      
-    ));
+    )));
   }
 
   

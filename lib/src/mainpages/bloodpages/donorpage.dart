@@ -43,9 +43,9 @@ class DonorPagestate extends State<DonorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
-        title: Center(child:new Text("Blood HUNT", style: TextStyle(fontFamily: "Arcon",fontWeight: FontWeight.bold),), 
-        ) ),
+      // appBar: new AppBar(
+      //   title: Center(child:new Text("Blood HUNT", style: TextStyle(fontFamily: "Arcon",fontWeight: FontWeight.bold),), 
+      //   ) ),
       body: ListView(
         children: <Widget>[
           Stack(

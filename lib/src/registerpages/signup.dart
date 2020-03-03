@@ -1,26 +1,19 @@
-import 'package:blooddonor/src/mainpages/Bloodpages/bloodpage.dart';
-import 'package:blooddonor/src/mainpages/bloodpages/bloodpage.dart' as prefix0;
 import 'package:blooddonor/src/mainpages/homepages/mainpage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user.dart';
-import 'loginpage.dart';
 import 'dart:ui';
-
-class SignUp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Sign Up',
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: new SignUpPage(),
-    );
-  }
-}
+import 'package:blooddonor/src/models/user.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:location/location.dart' as prefix0;
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -95,25 +88,54 @@ bool donor=false;
     );
 
   }
+    static const  kGoogleApiKey = "AIzaSyAKyyxfAHcuiw5-U05cyN1z7CzgSsWSpHM";
+  GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
+  
+var location = new prefix0.Location();
+double lat,lng;
+static var userLocation;
+  @override
+  void map() async{
+//     try {
+//   userLocation = await location.getLocation();
+// } on PlatformException catch (e) {
+//   if (e.code == 'PERMISSION_DENIED') {
+//     userLocation = 'Permission denied';
+//     print(userLocation);
+//   } 
+//   userLocation = null;
+// }
+user.lat="0";
+user.long= "0";
+ databaseReference.push().set(user.toJson());
+            var router = new MaterialPageRoute(
+                builder: (BuildContext context) => new MainPage(user.mobile));
+            Navigator.of(context).pushReplacement(router);
+              formKey.currentState.reset();
+print(userLocation.longitude);
+print(userLocation.latitude);
+   //userLocation =  await location.getLocation();
+  }
+
  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
+    return  Container(
          decoration: BoxDecoration(
+            color: Colors.white,
           image: DecorationImage(
-            image: AssetImage("images/drop.jpg"),
-            fit: BoxFit.fill,
+            image: AssetImage("images/main.png"),
+            fit: BoxFit.cover,
           ),
         ),
-      child:BackdropFilter(
-        filter:  ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-        child: Center(
+        child:Scaffold(
+          backgroundColor: Colors.white54,
+      body: Container(
+          //color: Colors.white54,
         child: Stack(
             alignment: Alignment.bottomCenter,
             children: <Widget>[
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
-               
                 child: Form(
                   key: formKey,
                   child: ListView(
@@ -131,6 +153,9 @@ bool donor=false;
               genderField(),
             
               passwordField(),
+               SizedBox(
+                        height: 10.0,
+                      ),
               addressField(),
               checkbox(),
                  SizedBox(
@@ -147,7 +172,7 @@ bool donor=false;
           ),
         
       ),)
-    ));
+    );
   }
   bool isNumeric(String s) {
     if (s == null) {
@@ -201,6 +226,7 @@ bool donor=false;
   Widget mobileField() {
     return new TextFormField(
         decoration: InputDecoration(labelText: "Mobile"),
+           keyboardType: TextInputType.number,
         onSaved: (val) => user.mobile = val,
         validator: (String value) {
           if (!isNumeric(value) && value.length == 11) {
@@ -232,16 +258,108 @@ bool donor=false;
       ],
     ));
   }
-
+Future<LatLng> getUserLocation() async {
+ //var currentLocation = <String, double>{};
+ final uLocation = userLocation = await location.getLocation();
+try {
+  //currentLocation = await uLocation.getLocation();
+  final lat = uLocation.latitude;
+  final lng = uLocation.longitude;
+  final center = LatLng(lat, lng);
+  return center;
+} on Exception {
+  //currentLocation = null;
+  return null;
+}
+}
   Widget addressField() {
-    return new TextFormField(
+     return new TextFormField(
         decoration: InputDecoration(labelText: "Address"),
+           keyboardType: TextInputType.number,
         onSaved: (val) => user.address = val,
         validator: (String value) {
-          if (value == "") {
-            return "Address is required";
+          if (value.length> 11) {
+            return "Address must be a given";
           }
         });
+  //   return InkWell(
+  //     onTap:  ()async {
+  //           // show input autocomplete with selected mode
+  //           // then get the Prediction selected
+            
+  //          final center = await getUserLocation();
+  // Prediction p = await PlacesAutocomplete.show(
+  //     context: context,
+  //     strictbounds: center == null ? false : true,
+  //     apiKey: kGoogleApiKey,
+  //     //onError: onError,
+  //     mode: Mode.overlay,
+  //     language: "en",
+  //     location: center == null
+  //         ? null
+  //         : Location(center.latitude, center.longitude),
+  //     radius: center == null ? null : 100000000);
+  //               displayPrediction(p);
+  //         },
+  //     child: Container(
+  //       width: 400,
+  //       height: 40,
+  //       decoration: BoxDecoration(
+  //         ///color: Color.fromRGBO(220, 20, 60, 0.8),
+  //         color: Colors.green,
+  //         borderRadius: BorderRadius.circular(30.0),
+  //         boxShadow: [
+  //           //BoxShadow(color: Colors.grey, offset: Offset(1, 2)),
+  //         ],
+  //       ),
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         crossAxisAlignment: CrossAxisAlignment.center,
+  //         children: <Widget>[
+  //           Text(
+  //             addressT,
+  //             style: TextStyle(
+  //                 color: Colors.white, fontSize: 15.0, fontFamily: 'Merienda'),
+  //           ),
+  //           SizedBox(
+  //             width: 0.0,
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );;
+  }
+String addressT="Set Address";  
+Future<Null> displayPrediction(Prediction p) async {
+    if (p != null) {
+      print(p);
+      PlacesDetailsResponse detail =
+      await _places.getDetailsByPlaceId(p.placeId);
+
+      var placeId = p.placeId;
+      addressT= p.description;
+      print(addressT);
+      lat = detail.result.geometry.location.lat;
+      lng = detail.result.geometry.location.lng;
+
+      var address = await Geocoder.local.findAddressesFromQuery(p.description);
+
+      print(lat); 
+      print(lng);
+      //  Navigator.of(context).pushReplacement(
+      //                  MaterialPageRoute(
+      //                   builder: (context) =>MapSearch(mobile, lat, lng),
+      //                 ));
+
+    //    CameraPosition pi = CameraPosition(
+    //         bearing: 15,
+    //         target: LatLng(lat, lng),
+    //         tilt: 75,
+    //         zoom: 25);
+    //         //getdata();
+    // final GoogleMapController controller = await _controller.future;
+    // controller.animateCamera(CameraUpdate.newCameraPosition(pi));
+     }
   }
 
 Widget bloodfield() {
@@ -304,11 +422,8 @@ Widget bloodfield() {
                 formKey.currentState.reset();
             //save form data to the database
             saveAuthData(true, user);
-            databaseReference.push().set(user.toJson());
-            var router = new MaterialPageRoute(
-                builder: (BuildContext context) => new MainPage(user.mobile));
-            Navigator.of(context).pushReplacement(router);
-              formKey.currentState.reset();
+            map();
+           
 
              
             } else {
@@ -325,7 +440,7 @@ Widget bloodfield() {
 
 
 
-           
+          
         }
       },
       child: Container(

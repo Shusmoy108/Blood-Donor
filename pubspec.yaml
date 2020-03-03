@@ -30,11 +30,19 @@ dependencies:
   firebase_database: ^2.0.3
   url_launcher: ^5.0.2
   font_awesome_flutter: ^8.4.0
+  autocomplete_textfield: ^1.6.4
   intl: ^0.15.8
   shared_preferences: ^0.5.2
   smooth_star_rating: ^1.0.2
   datetime_picker_formfield: ^0.4.2
   flutter_datetime_picker: ^1.2.6
+  google_maps_flutter: ^0.5.21+8
+  location: ^2.3.5
+  http: ^0.12.0+2
+  flutter_google_places: ^0.2.3
+  google_maps_webservice: ^0.0.16
+  geocoder: ^0.2.1
+  #flutter_google_places_autocomplete: ^0.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -56,6 +64,7 @@ flutter:
     - images/blood.jpg
     - images/FAQ.jpg
     - images/drop.jpg
+    - images/main.png
     
    
   # To add assets to your application, add an assets section, like this:

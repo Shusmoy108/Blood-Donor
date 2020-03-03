@@ -19,6 +19,8 @@ class User {
   String etuition='No';
   String f='x';
   String bloodgroup;
+  String long;
+  String lat;
   int donationnumber=0;
   int donationtime=0;
   String donor;
@@ -53,6 +55,8 @@ class User {
         rating = snapshot.value["rating"],
         number = snapshot.value["number"],
         subject = snapshot.value["subject"],
+        long= snapshot.value["long"],
+        lat= snapshot.value["lat"],
         notification = snapshot.value["notification"];
   toJson() {
     return {
@@ -67,10 +71,8 @@ class User {
       "donationnumber":donationnumber,
       "donationtime":donationtime,
       "donor":donor,
-
-     
-     
-      
+      "long":long,
+      "lat":lat, 
     };
   }
 }

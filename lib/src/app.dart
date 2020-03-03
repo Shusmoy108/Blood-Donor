@@ -1,21 +1,21 @@
 import 'package:blooddonor/src/mainpages/homepages/mainpage.dart';
+import 'package:blooddonor/src/mainpages/mappages/mappage.dart';
+import 'package:blooddonor/src/mainpages/mappages/searchpage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 import 'registerpages/loginpage.dart';
 import 'models/user.dart';
 
 class App extends StatelessWidget {
   User u;
-  final FirebaseDatabase database = FirebaseDatabase.instance;
-  DatabaseReference databaseReference;
   String mobile;
   Future<bool> loadAuthData() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     mobile= sp.getString("mobile");
     //sp.clear();
     return sp.getBool("auth");
+    
   }
 
   @override
@@ -29,6 +29,9 @@ class App extends StatelessWidget {
        builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data) {
+              //return 
+              //return MapSample(mobile);
+              //return demo();
               return MainPage(mobile);
             } else {
               return LoginPage();

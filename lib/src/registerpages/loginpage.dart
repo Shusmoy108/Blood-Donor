@@ -72,7 +72,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           }
           saveAuthData(true, u);
           var router = new MaterialPageRoute(
-              builder: (BuildContext context) => new MainPage(email)
+              builder: (BuildContext context) => 
+              new MainPage(email)
+              //new MapSample(email)
               
               );
           Navigator.of(context).pushReplacement(router);
@@ -101,23 +103,23 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
+    return Container(
          decoration: BoxDecoration(
+           color:Colors.white,
           image: DecorationImage(
-            image: AssetImage("images/blood.jpg"),
+            image: AssetImage("images/main.png"),
             fit: BoxFit.fill,
           ),
         ),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 3,sigmaY: 3),
-        child: Center(
+        child:Scaffold(
+          backgroundColor: Colors.white54,
+      body:  Center(
         child: Stack(
             alignment: Alignment.bottomCenter,
             children: <Widget>[
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
-               
+                color: Colors.white54,
                 child: Form(
                   key: loginFormKey,
                   child: Column(
@@ -134,7 +136,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         height: 10.0,
                       ),
                       loginbutton(),
-                      forgetPassowrd(),
+                     // forgetPassowrd(),
                       noAccount(),
                     ],
                   ),
@@ -144,7 +146,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           ),
         
       ),
-    )));
+    ));
   }
 
 
@@ -279,7 +281,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           FlatButton(
             onPressed: () {
               var router = new MaterialPageRoute(
-                  builder: (BuildContext context) => new SignUp());
+                  builder: (BuildContext context) => new SignUpPage());
 
               Navigator.of(context).push(router);
             },

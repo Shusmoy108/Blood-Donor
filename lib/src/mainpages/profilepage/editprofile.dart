@@ -97,23 +97,23 @@ class EditProfileState extends State<EditProfile> {
   }
 @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
+    return  Container(
          decoration: BoxDecoration(
+            color: Colors.white,
           image: DecorationImage(
-            image: AssetImage("images/drop.jpg"),
-            fit: BoxFit.fill,
+            image: AssetImage("images/main.png"),
+            fit: BoxFit.cover,
           ),
         ),
-      child:BackdropFilter(
-        filter:  ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-        child: Center(
+        child:Scaffold(
+          backgroundColor: Colors.white54,
+      body: Container(
+          //color: Colors.white54,
         child: Stack(
             alignment: Alignment.bottomCenter,
             children: <Widget>[
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
-               
                 child: Form(
                   key: formKey,
                   child: ListView(
@@ -130,13 +130,13 @@ class EditProfileState extends State<EditProfile> {
              
               genderField(),
             
-            passwordField(),
+              passwordField(),
               addressField(),
               checkbox(),
                  SizedBox(
                         height: 10.0,
                       ),
-              submitButton()
+              signbutton()
                   
                     
                     ],
@@ -147,7 +147,7 @@ class EditProfileState extends State<EditProfile> {
           ),
         
       ),)
-    ));
+    );
   }
 
   bool isNumeric(String s) {
@@ -334,6 +334,54 @@ Widget bloodfield() {
               Navigator.of(context).pushReplacement(router);
         }
       },
+    );
+  }
+
+  Widget signbutton() {
+    return InkWell(
+      onTap: () {
+     if (formKey.currentState.validate()) {
+          user.gender = gender;
+          if(donor){
+            user.donor="Yes";
+          }
+          else{
+            user.donor="No";
+          }
+          formKey.currentState.save();
+          edit();
+           var router = new MaterialPageRoute(
+                  builder: (BuildContext context) => new MainPage(user.mobile));
+           
+              Navigator.of(context).pushReplacement(router);
+        }
+      },
+      child: Container(
+        width: 400,
+        height: 40,
+        decoration: BoxDecoration(
+          ///color: Color.fromRGBO(220, 20, 60, 0.8),
+          color: Colors.green,
+          borderRadius: BorderRadius.circular(30.0),
+          boxShadow: [
+            //BoxShadow(color: Colors.grey, offset: Offset(1, 2)),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Edit Profile',
+              style: TextStyle(
+                  color: Colors.white, fontSize: 15.0, fontFamily: 'Merienda'),
+            ),
+            SizedBox(
+              width: 0.0,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

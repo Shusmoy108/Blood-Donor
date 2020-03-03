@@ -1,3 +1,4 @@
+import 'package:blooddonor/src/mainpages/aboutpages/aboutpage.dart';
 import 'package:blooddonor/src/mainpages/bloodpages/homepage.dart';
 import 'package:blooddonor/src/mainpages/bloodstoriespage/bloodstoriespage.dart';
 import 'package:blooddonor/src/mainpages/factpage/faqpage.dart';
@@ -30,7 +31,7 @@ class _MainPageState extends State<MainPage> {
           context: context,
           builder: (context) => new AlertDialog(
                 title: new Text('Are you sure?'),
-                content: new Text('Do you want to exit BloodHunt'),
+                content: new Text('Do you want to exit রক্তদান'),
                 actions: <Widget>[
                   new FlatButton(
                     onPressed: () => Navigator.of(context).pop(false),
@@ -73,8 +74,9 @@ class _MainPageState extends State<MainPage> {
          _pages=[
          HomePage(email),
          Profile(u),
-         FAQPage(),
-         BloodstoriesPage(u)
+         FAQPage(u),
+         AboutPage(email),
+        // BloodstoriesPage(u)
         ];
         }});
     return true;
@@ -124,14 +126,22 @@ class _MainPageState extends State<MainPage> {
               'FAQ',
             ),
           ),
-           BottomNavigationBarItem(
-            icon: Icon(
-              FontAwesomeIcons.penNib,
-            ),
-            title: Text(
-              'Blood Stories',
-            ),
-          ),
+          //  BottomNavigationBarItem(
+          //   icon: Icon(
+          //     Icons.description,
+          //   ),
+          //   title: Text(
+          //     'About',
+          //   ),
+          // ),
+          //  BottomNavigationBarItem(
+          //   icon: Icon(
+          //     FontAwesomeIcons.penNib,
+          //   ),
+          //   title: Text(
+          //     'Blood Stories',
+          //   ),
+          // ),
         ],
         currentIndex: _selectedIndex,
         onTap: (int index) {
